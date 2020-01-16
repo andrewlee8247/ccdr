@@ -8,8 +8,8 @@ Commandline tool for interacting with library
 #badcode=
 import click
 
-from myrepolib.repomod import print_name
-from myrepolib import __version__
+from ccdrlib.ccdrmod import print_name
+from ccdrlib import __version__
 
 
 @click.version_option(__version__)
