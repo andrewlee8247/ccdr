@@ -5,7 +5,7 @@
 """
 Commandline tool for interacting with library
 """
-this bad
+
 import click
 
 from ccdrlib.ccdrmod import print_name
