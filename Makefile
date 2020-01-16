@@ -2,8 +2,9 @@ setup:
 	python3 -m venv ~/.ccdr
 
 install:
-	pip install --upgrade pip &&\
-		pip install -r requirements.txt
+	#pip3 install --upgrade pip --user &&\
+	
+	pip3 install -r requirements.txt --user
 
 test:
 	python -m pytest -vv --cov=ccdrlib tests/*.py
