@@ -8,7 +8,8 @@ install:
 
 test:
 	python -m pytest -vv --cov=ccdrlib tests/*.py
-	python -m pytest --nbval notebook.ipynb
+	python -m pytest --nbval *.ipynb &&\
+    python -m pytest --nbval --cov=raw_data_test/*ipynb
 
 
 lint:

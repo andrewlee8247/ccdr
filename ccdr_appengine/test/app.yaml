@@ -1,0 +1,11 @@
+runtime: python37
+api_version: 1
+threadsafe: true
+service: default
+automatic_scaling:
+    min_pending_latency: 5s
+    max_pending_latency: 10s
+    
+handlers:
+    - url: /.*
+      script: main.app
