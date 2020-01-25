@@ -8,8 +8,7 @@ install:
 test:
 	python -m pytest -vv --cov=ccdrlib tests ccdr_appengine/main ccdr_appengine/test/*.py
 	python -m pytest --nbval *.ipynb &&\
-    python -m pytest --nbval  ~/ccdr/raw_data_test/*.ipynb
-
+    python -m pytest --nbval **/*.ipynb 
 
 lint:
 	pylint --disable=R,C *.py **/*.py
