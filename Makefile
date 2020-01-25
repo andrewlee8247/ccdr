@@ -7,7 +7,7 @@ install:
 
 test:
 	python -m pytest -vv --cov=ccdrlib tests ccdr_appengine/main ccdr_appengine/test/*.py
-	python -m pytest --nbval *.ipynb &&\
+	python -m pytest --nbval *.ipynb #&&\
     #python -m pytest --nbval **/*.ipynb 
 
 lint:
