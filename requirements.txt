@@ -7,4 +7,4 @@ nbval
 click
 flask
 requests
-google cloud storage
+google-cloud-storage
