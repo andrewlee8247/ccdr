@@ -1,11 +1,13 @@
-from flask import Flask
-from flask import jsonify
+from flask import Flask, jsonify, request
 from google.cloud import storage
 import pandas as pd
 from io import BytesIO
+import default_predictions
+from flasgger import Swagger
 
 
 app = Flask(__name__)
+Swagger(app)
 app.config['JSON_SORT_KEYS'] = False
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
@@ -41,7 +43,9 @@ def home():
     <h2>This app will predict if a cardholder will default
     on their next payment.</h2>
     <a href="https://ccdr-265306.appspot.com/cardholder/data">
-    <button class="button">Click to View JSON Data</button></a>
+    <button class="button">Click to View Raw Data</button></a>
+    <a href="https://ccdr-265306.appspot.com/apidocs">
+    <button class="button">Click to Make Predictions</button></a>
     </div>
     </body>
     </html>
@@ -62,5 +66,85 @@ def raw_data():
     return jsonify(data.to_dict())
 
 
+@app.route('/cardholder/attributes/api', methods=['GET'])
+def list_attributes():
+    """Return list of attributes and their data types
+
+
+    GET /cardholder/attributes/api
+    ---
+    responses:
+        200:
+            description: Returns a list of attributes and their datatypes.
+
+    """
+
+    attributes = {'ID': 'Int', 'AGE': 'Int', 'SEX': 'String/Float',
+                  'EDUCATION': 'String/Float', 'MARRIAGE': 'String/Float',
+                  'LIMIT_BAL': 'Float', 'BILL_AMT1': 'Float',
+                  'BILL_AMT2': 'Float', 'BILL_AMT3': 'Float',
+                  'BILL_AMT4': 'Float', 'BILL_AMT5': 'Float',
+                  'BILL_AMT6': 'Float', 'PAY_AMT1': 'Float',
+                  'PAY_AMT2': 'Float', 'PAY_AMT3': 'Float',
+                  'PAY_AMT4': 'Float', 'PAY_AMT5': 'Float',
+                  'PAY_AMT6': 'Float', 'PAY_0': 'String/Float',
+                  'PAY_2': 'String/Float', 'PAY_3': 'String/Float',
+                  'PAY_4': 'String/Float', 'PAY_5': 'String/Float',
+                  'PAY_6': 'String/Float'}
+
+    return jsonify({'attributes': attributes})
+
+
+@app.route('/cardholder/predictions/api', methods=['GET'])
+def get_predictions():
+    """ Make credit card default predictions on cardholder data
+
+    ---
+        consumes: application/json
+        parameters:
+            -   in: query
+                name: fields
+                type: string
+                description: Fields to specify for results (default all)
+                required: False
+            -   in: query
+                name: where
+                type: string
+                description: WHERE clause (default none)
+                required: False
+            -   in: query
+                name: and_clause
+                type: string
+                description: AND clause (default none)
+
+        responses:
+            200:
+                description: Returns prediction results.
+
+    """
+    fields = request.args.get('fields')
+    where = request.args.get('where')
+    and_clause = request.args.get('and_clause')
+    if fields is None:
+        fields = None
+    else:
+        fields
+    if where is None:
+        where = None
+    else:
+        where
+    if and_clause is None:
+        and_clause = None
+    else:
+        and_clause
+    try:
+        response = jsonify(default_predictions.predict_to_dict(fields, where, and_clause))
+    except:
+        response = jsonify({'fields': fields, 'where': where,
+                            'and_clause': and_clause, 'status': 'error'})
+
+    return response
+
+
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8080, debug=True)
+    app.run(debug=True)
