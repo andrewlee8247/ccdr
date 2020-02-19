@@ -1,0 +1,13 @@
+pytest
+pylint
+jupyter
+pytest-cov
+pandas
+nbval
+click
+flask
+requests
+google-cloud-storage
+google-cloud-bigquery
+bs4
+flasgger
