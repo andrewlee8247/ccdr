@@ -1,6 +1,0 @@
-runtime: python37
-service: default
-    
-handlers:
-    - url: /.*
-      script: auto

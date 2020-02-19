@@ -1,6 +1,0 @@
-Flask==1.1.1
-pandas
-pylint
-google-cloud-storage
-google-cloud-bigquery
-flasgger
