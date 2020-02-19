@@ -9,3 +9,4 @@ flask
 requests
 google-cloud-storage
 google-cloud-bigquery
+bs4
