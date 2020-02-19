@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from google.cloud import storage
 import pandas as pd
 from io import BytesIO
-import default_predictions
+from lib import predictions
 from flasgger import Swagger
 
 
@@ -113,9 +113,9 @@ def get_predictions():
                 description: WHERE clause (default none)
                 required: False
             -   in: query
-                name: and_clause
+                name: and_op
                 type: string
-                description: AND clause (default none)
+                description: AND operator (default none)
 
         responses:
             200:
@@ -124,24 +124,13 @@ def get_predictions():
     """
     fields = request.args.get('fields')
     where = request.args.get('where')
-    and_clause = request.args.get('and_clause')
-    if fields is None:
-        fields = None
-    else:
-        fields
-    if where is None:
-        where = None
-    else:
-        where
-    if and_clause is None:
-        and_clause = None
-    else:
-        and_clause
+    and_op = request.args.get('and_op')
+
     try:
-        response = jsonify(default_predictions.predict_to_dict(fields, where, and_clause))
+        response = jsonify(predictions.predict_to_dict(fields, where, and_op))
     except:
         response = jsonify({'fields': fields, 'where': where,
-                            'and_clause': and_clause, 'status': 'error'})
+                            'and_op': and_op, 'status': 'error'})
 
     return response
 
