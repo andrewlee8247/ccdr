@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from google.cloud import storage
 import pandas as pd
 from io import BytesIO
-from lib import predictions
+from ccdr_lib import predictions
 from flasgger import Swagger
 
 
