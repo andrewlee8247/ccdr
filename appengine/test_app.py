@@ -1,4 +1,4 @@
-from default.lib import predictions
+from default.ccdr_lib import predictions
 
 
 def test_func():
