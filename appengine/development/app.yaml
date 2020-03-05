@@ -1,0 +1,6 @@
+runtime: python37
+service: development
+    
+handlers:
+    - url: /.*
+      script: auto

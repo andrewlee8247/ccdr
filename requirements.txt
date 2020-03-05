@@ -11,3 +11,4 @@ google-cloud-storage
 google-cloud-bigquery
 bs4
 flasgger
+google-api-python-client
