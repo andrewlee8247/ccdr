@@ -4,4 +4,3 @@ pylint
 google-cloud-storage
 google-cloud-bigquery
 flasgger
-locust

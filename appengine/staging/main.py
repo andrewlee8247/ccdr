@@ -45,7 +45,7 @@ def home():
     on their next payment.</h2>
     <a href="https://ccdr-265306.appspot.com/cardholder/data">
     <button class="button">Click to View Raw Data</button></a>
-    <a href="https://ccdr-265306.appspot.com/apidocs">
+    <a href="https://staging-dot-ccdr-265306.appspot.com/apidocs">
     <button class="button">Click to Make Predictions</button></a>
     </div>
     </body>

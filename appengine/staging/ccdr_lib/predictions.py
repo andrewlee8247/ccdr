@@ -107,4 +107,4 @@ def predict_to_dict(fields=None, where=None, and_op=None):
 
     df = pd.DataFrame(clean_list, columns=column_list)
 
-    return df.to_dict('records')
+    return df.to_dict('list')
