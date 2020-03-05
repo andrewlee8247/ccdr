@@ -1,0 +1,6 @@
+runtime: python37
+service: staging
+    
+handlers:
+    - url: /.*
+      script: auto
