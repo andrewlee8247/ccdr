@@ -135,7 +135,7 @@ def get_predictions():
     return response
 
 
-@app.route('/loaderio-60d6da6fdab639928970a0f0cc8d49f1')
+@app.route('/loaderio-60d6da6fdab639928970a0f0cc8d49f1/')
 def loader():
     """Returns token for loader.io HTML"""
     return """
