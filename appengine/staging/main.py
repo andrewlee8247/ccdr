@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from flask import redirect
 from google.cloud import storage
 import pandas as pd
 from io import BytesIO
@@ -137,14 +138,9 @@ def get_predictions():
 
 @app.route('/loaderio-60d6da6fdab639928970a0f0cc8d49f1/')
 def loader():
-    """Returns token for loader.io HTML"""
-    return """
-    <!DOCTYPE html>
-    <body>
-    loaderio-60d6da6fdab639928970a0f0cc8d49f1
-    </body>
-    </html>
-    """
+    """Redirect to loader io file"""
+
+    return redirect('https://storage.googleapis.com/loaderio/loaderio-60d6da6fdab639928970a0f0cc8d49f1.txt')
 
 
 if __name__ == '__main__':
