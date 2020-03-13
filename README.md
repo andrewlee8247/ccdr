@@ -53,10 +53,30 @@ the cardholders were university educated, and 60.37% were female.
 
 Additional details showed that the percentage of defaults by age group were higher among younger cardholders, the highest
 being those between the ages of 25 to 30. Interestingly, this is in line with the current demographics on deliquencies
-in the United States, though the data is from 2005 and from Taiwan. 
+in the United States, though the data used for the project was from Taiwan in 2005. 
 
 ![Default Percentages by Age](https://i.ibb.co/bjhCgs6/Percentage-of-Default-By-Age.png)
 
+The data also showed that the highest percentage of defaults were from cardholders that were university educated. However,
+this is probably due to the dataset being small, which indicates that it is likely skewed.
+
+![Default Percentages by Education](https://i.ibb.co/555kx80/Percentage-of-Default-By-Education.png)
+
+Between males and females, it was observed that females had a higher percentage of default than males. Again, this is 
+likely due to the fact that there was more cardholder data on females than males.
+
+![Default Percentages by Gender](https://i.ibb.co/yF8rV55/Percentage-of-Default-By-Gender.png)
+
+Weekly milestones and tasks were created in Jira. Stories describing weekly objectives were created that was scheduled
+for a ten week timeframe from start to deployement. For every week a sprint was started and tasks were added to detail
+each step that was needed to complete each sprint. Upon completion, sprints were marked as completed on the project 
+board.
+
+The following is a demo video created for the first week which outlined the project plan:
+
+![Demo Video Project Plan](https://www.youtube.com/watch?v=Asisfa8DpvA&feature=youtu.be)
+
+#### Week Two: Continuous Integration with CircleCI
 
 
 References:
