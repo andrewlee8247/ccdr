@@ -121,8 +121,30 @@ JSON response of the data was not used. This was due to latency and issues with 
 that the data should be read from a database rather than storage.
 
 #### Week 4: Develop an ETL Pipeline that Ingests Data into BigQuery and Schedule Recurring Cron Job to Batch Update the Data
+An ETL pipeline was created to update the database setup in BigQuery with the data from the machine learning repository
+through a scheduled recurring cron job. The process for creating this pipeline was to first develop a process to ingest 
+the data from the machine learning repository into Cloud Storage. To do this, a Cloud Function was created that scraped the
+repository of all possible files using Beautiful Soup, and uploaded the files into Cloud Storage. Next, a second Cloud
+Function was created that batch processed the data from Cloud Storage into BigQuery. To automate the process, a cron job 
+was setup through Google Cloud Scheduler, and a topic was created in Google Pub/Sub. 
 
+From Cloud Scheduler, the cron is set to ping the topic on Pub/Sub on a daily basis. Once the topic is pinged, 
+the Cloud Function that is setup to scrape the files from the machine learning repository and upload them to Cloud 
+Storage is set to trigger and run. After the Cloud Function finishes the process and the files are uploaded to Cloud 
+Storage the next function is set to trigger afterwards. This function then updates the table in BigQuery and the batch 
+process is completed.
 
+The following is a diagram of the process:
+
+![ETL Pipeline](https://i.ibb.co/RDg0NkD/GCP-ETL-Pipeline.png)
+
+The following is the sprint report from that week:
+
+![Sprint 4](https://i.ibb.co/4FgwxXY/Week4-Sprint.png)
+
+The demo video can be viewed by clicking the image below:
+
+[![Demo Video ETL](https://i.ibb.co/XX0DxYD/Demo4.png)](https://www.youtube.com/watch?v=fP56XtkbpIU&feature=youtu.be)
 
 References:
 1. https://newsroom.transunion.com/consumers-poised-to-continue-strong-credit-activity-this-holiday-season/
