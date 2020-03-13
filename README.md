@@ -19,26 +19,43 @@ defaults on payments to guide the rate of credit card issuance based on certain 
 
 For the project, data was taken from a study conducted in Taiwan from April 2005 to September 2005 on credit card clients
 to determine the likelihood of defaults based on various indicators. The data is publicly available from the UCI machine
-learning repository <sup>4</sup>. The dataset includes 23 explanatory variables and 1 response variable, which was a binary
-variable indicating whether or not there was a default on payment (Yes = 1, No = 2). Details on the variables are as
-follows:
+learning repository <sup>4</sup>. The dataset contains 30,000 observations, and includes 23 explanatory variables and 
+1 response variable, which is a binary variable indicating whether or not there was a default on a 
+payment (Yes = 1, No = 2). Details on the variables are as follows:
 
 ![Default Variables](https://i.ibb.co/0JBpYW3/Default-variables.png)
 
 With the data from the repository, a data ingestion pipeline was created, a machine learning model was trained, and
 predictions were served out through an application that was built and deployed using Google App Engine. Predictive
 models were trained using Google BigQuery ML. The MVP is currently setup to automatically ingest new data from the machine
-learning repository on a daily basis, where updated data stored in Google Cloud Storage is batch processed into a 
-database setup in Google BigQuery. The application has the capablity of making new predictions on the updated data
-through an API that was built to interact with the database and BigQuery ML. In addition, the application employs
-Continuous Integration using CircleCI, and Continuous Delivery using Google Cloud Build. The working MVP can be used as 
-a component for a fully featured product that assists in risk management for credit card issuers. 
+learning repository on a daily basis, where updated data is cleaned, transformed, and loaded into Google Cloud Storage, 
+which is then batch processed into a database setup in Google BigQuery. The application has the capablity of making new 
+predictions on the updated data through an API that was built to interact with the database and BigQuery ML. In addition, 
+the application employs Continuous Integration using CircleCI, and Continuous Delivery using Google Cloud Build. 
+The working MVP can be used as a component for a fully featured product that assists in risk management for credit card 
+issuers. 
 
 ### Project Development:
 The project went through different stages of development which started from a planning phase, development phase, 
-testing phase, and deployment phase.  
+testing phase, and deployment phase. The MVP was developed over a ten week project plan. Weekly milestones were created in 
+Jira, which was later used for starting weekly sprints, adding tasks, and tracking progress. The following provides a 
+detailed explanation of the weekly goals that were setup and the process used to complete them.  
 
-#### Initial 
+#### Week One: Initial Planning
+The initial planning phase went through a process of deciding project goals, discovering which data will be used for
+model and application development, and weekly scheduling of milestones and demo videos. The project deck can be found
+[here.](https://docs.google.com/presentation/d/1jdptGT_hq46K5u7wzmf00m9FIMfsi3x5pmDLyLjKjNA/edit#slide=id.p)
+The decision was made to focus the project on the risks associated with credit card clients based on demographics, 
+past payment history, and history of deliquency. Data from the UCI machine learning repository was chosen as it provided 
+significant details on credit cardholders, and was a good baseline to build out a MVP. Exploratory Data Analysis (EDA) 
+of the data showed that median balance was around 4670.25 US dollars, and the median age was 34 years old. About 46.77% of
+the cardholders were university educated, and 60.37% were female.
+
+Additional details showed that the percentage of defaults by age group were higher among younger cardholders, the highest
+being those between the ages of 25 to 30. Interestingly, this is in line with the current demographics on deliquencies
+in the United States, though the data is from 2005 and from Taiwan. 
+
+![Default Percentages by Age](https://i.ibb.co/bjhCgs6/Percentage-of-Default-By-Age.png)
 
 
 
