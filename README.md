@@ -200,7 +200,7 @@ The demo video can be viewed by clicking the image below:
 
 Although the results from AutoML were much better than the evaluation made from the model trained in BigQuery ML, it 
 was determined that for the purposes of the MVP, that AutoML was not necessary, as the goal of the project was to 
-develop a functional application that serves out prediction results. As noted in the above, it is recommended that
+develop a functional application that serves out prediction results. As noted in the week 5 summary, it is recommended that
 AutoML is considered in a future implementation.
 
 #### Week 7: Deploy Application onto Development, Staging, and Production Environments
@@ -224,6 +224,57 @@ The following is the sprint report from that week:
 The demo video can be viewed by clicking the image below:
 
 [![Demo Video CD](https://i.ibb.co/PxxMmDJ/Demo7.png)](https://www.youtube.com/watch?v=QaKOCyyftqA&feature=youtu.be)
+
+#### Week 8: Test Application Component APIS and Create Cost Forecast with BigQuery ML and Billing API
+APIs used to build application components were tested and validated that they were working properly.APIs used include:
+Google Cloud Storage, BigQuery, and BigQuery ML. A cost forecast was made using BigQuery ML and Google's billing export
+module, which exports daily usage to BigQuery. As development of the MVP was using a free tier account, no costs were
+predicted.
+
+The following is the sprint report from that week:
+
+![Sprint 8](https://i.ibb.co/6YxxWYy/Week8-Sprint.png)
+
+The demo video can be viewed by clicking the image below:
+
+[![Demo Video API](https://i.ibb.co/tY9Kzd7/Demo8.png)](https://www.youtube.com/watch?v=0RFpYm4gYtE&feature=youtu.be)
+
+#### Week 9: Setup Stackdriver Monitoring and Load Test Application
+Application monitoring was setup through Google Stackdriver. Custom dashboards were created to monitor, track, and
+visualize usage based on various metrics. 
+
+![Cloud Functions](https://i.ibb.co/y6Sbj8Z/Cloud-Functionspng.png)
+
+Health checks and alerts were created that sends notifications on error logs, usage, application latency, and any 
+application crashes through Slack and email. 
+
+![Incidents](https://i.ibb.co/Yjs7mgy/Incidentspng.png)
+
+![Slack](https://i.ibb.co/GRPpPt9/slack-notifications.png)
+
+Load testing was performed on the staging environment using Locust. Problems with failures and latency in responses
+were diagnosed. 
+
+![Locust](https://i.ibb.co/n7SKxR2/locust-load-test.png)
+
+The following is the sprint report from that week:
+
+![Sprint 9](https://i.ibb.co/ZzTpdz3/Week9-Sprint.png)
+
+The demo video can be viewed by clicking the image below:
+
+[![Demo Video Load](https://i.ibb.co/vvQ5rL5/Demo9.png)](https://www.youtube.com/watch?v=vBWq36HetLc&feature=youtu.be)
+
+One of the original goals was to setup rules for scaling and load balancing if necessary. However, due to development
+costs, and because the App Engine deployment was set to scale automatically, evaluating scaling rules did not
+seem necessary. On the other hand, after trying out different use cases for load testing, an issue with timeouts was 
+identified. When requests are made for more than 10,000 records, there are times when the application cannot handle the 
+load. This is likely due to the fact that the App Engine standard environment was used and may have not been configured
+for optimal performance. It is recommended that a future iteration should use App Engine Flex or a deployment using 
+the Kubernetes Engine.
+
+#### Week 10: Finish Final Stages of MVP and Deploy into Production
+
 
 References:
 1. https://newsroom.transunion.com/consumers-poised-to-continue-strong-credit-activity-this-holiday-season/
