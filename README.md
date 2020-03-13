@@ -74,7 +74,7 @@ board.
 
 The following is a demo video created for the first week which outlined the project plan:
 
-![Demo Video Project Plan](https://www.youtube.com/watch?v=Asisfa8DpvA&feature=youtu.be)
+![Demo Video Project Plan](https://i9.ytimg.com/vi/Asisfa8DpvA/mq1.jpg?sqp=CJm3rvMF&rs=AOn4CLBk0LHEFehzjuJki87q6NZWjgUgEA)(https://www.youtube.com/watch?v=Asisfa8DpvA&feature=youtu.be)
 
 #### Week Two: Continuous Integration with CircleCI
 
