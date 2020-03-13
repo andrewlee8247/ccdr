@@ -146,6 +146,85 @@ The demo video can be viewed by clicking the image below:
 
 [![Demo Video ETL](https://i.ibb.co/XX0DxYD/Demo4.png)](https://www.youtube.com/watch?v=fP56XtkbpIU&feature=youtu.be)
 
+While the pipeline is fully functional and works as intended, it is recommended that the process should be changed
+as the workflow will not be able to handle big data workloads. Cloud Functions timeout at 9 minutes. Therefore, for large 
+webscraping and batch processing jobs, it is advisable that VM instances and/or services such as Google
+Data Flow is used.
+
+#### Week 5: Create the Machine Learning Model in BigQuery ML and Deliver Prediction Results
+A machine learning model was trained with the data using BigQuery ML, and the application was updated to deliver
+prediction results as a JSON response through an API that was created using Flask. The first step was to build and 
+evaluate the model using BiqQuery ML. A logistic regression model was therefore built and trained from the cardholder
+database. The model was evaluated using accuracy, precision and recall, F1, and AUC scores. After evaluation an initial 
+prediction was made to make sure that the model was functional. A script was then created to interact with the BigQuery ML
+API and deliver default prediction results in JSON format. The script that was created provided optional parameters to 
+filter based on fields such as cardholder age, limit balance, gender, and so on. Additionally, the script included 
+functionality to specify what fields to show as well. Afterwards, the script to make predictions was integrated with the 
+application script so that predictions can be made via REST API. Additionally, using Flasgger, a Swagger UI was integrated 
+to provide an interface for users the directly interact with the API. The updated files were pushed to GitHub, and after 
+testing, they were deployed onto App Engine. 
+
+![Swagger](https://i.ibb.co/V2q5YkX/predictionsswagger.png)
+
+The following is the sprint report from that week:
+
+![Sprint 5](https://i.ibb.co/7VVgW2H/Week5-Sprint.png)
+
+The demo video can be viewed by clicking the image below:
+
+[![Demo Video ML](https://i.ibb.co/xsYHCyL/Demo5.png)](https://www.youtube.com/watch?v=_NY7eujCO9Y&feature=youtu.be)
+
+The original goal for this week was to train and rigourously test a working model based on different machine learning
+methods. However, as BigQuery ML is still in beta, the service only supports classification models using logistic
+regression, and imported TensorFlow models that are limited to 256 MB in size. It is recommended that in a future 
+iteration, either a model trained and deployed in a VM instance or AutoML is used for better predictive accuracy. 
+
+As implementing the Swagger UI was an added task that was outside of the project plan, it was observed that
+development progress was ahead of schedule.
+
+#### Week 6: Create a Multi-Classification Model Using AutoML
+AutoML was used to create a mult-classification model on what a cardholder's repayment status will be in the 6th
+month. To implement this, data was extracted and transformed to specify repayment statuses in text format. That is,
+the data uses integers to indicate repayment status, such as -1 for 'pay duly'. These were transformed from 
+integer coding to text, as AutoML would not function properly. A model was then trained and evaluated for predictive 
+accuracy. Predictions were further made based on the data, and compared with the actual data. Accuracy results showed
+that they were in line with the precision score from model evaluation. 
+
+The following is the sprint report from that week:
+
+![Sprint 6](https://i.ibb.co/t2HG6Vz/Week6-Sprint.png)
+
+The demo video can be viewed by clicking the image below:
+
+[![Demo Video AutoML](https://i.ibb.co/Zxhx0gM/Demo6.png)](https://www.youtube.com/watch?v=f2q0LfnQz6A&feature=youtu.be)
+
+Although the results from AutoML were much better than the evaluation made from the model trained in BigQuery ML, it 
+was determined that for the purposes of the MVP, that AutoML was not necessary, as the goal of the project was to 
+develop a functional application that serves out prediction results. As noted in the above, it is recommended that
+AutoML is considered in a future implementation.
+
+#### Week 7: Deploy Application onto Development, Staging, and Production Environments
+Using Google Cloud Source Repositories and Cloud Build, the application was setup for Continuous Delivery.
+The first step was to setup Cloud Source Repositories and integrate it with GitHub. Cloud Build was then setup
+with build triggers that were set to build and deploy application changes pushed to GitHub automatically from 
+development to production. Files that were being worked on locally were updated with application updates and pushed
+to the development branch on GitHub. After testing and validation from CircleCI, the branch was then merged with 
+the production branch, and updates were automatically deployed onto App Engine. Due to time constraints, only development
+and production environments were used for testing and demonstration. However, the process from development to staging, 
+then to production, was successfully implemented during the load testing phase. 
+
+The following is a diagram of the process:
+
+![Continuous Delivery](https://i.ibb.co/0cdPwXf/GCP-Continuous-Delivery.png)
+
+The following is the sprint report from that week:
+
+![Sprint 7](https://i.ibb.co/jbFg8kv/Week7-Sprint.png)
+
+The demo video can be viewed by clicking the image below:
+
+[![Demo Video CD](https://i.ibb.co/PxxMmDJ/Demo7.png)](https://www.youtube.com/watch?v=QaKOCyyftqA&feature=youtu.be)
+
 References:
 1. https://newsroom.transunion.com/consumers-poised-to-continue-strong-credit-activity-this-holiday-season/
 2. https://www.newyorkfed.org/newsevents/news/research/2020/20200211
