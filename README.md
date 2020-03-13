@@ -77,8 +77,53 @@ The following is a demo video created for the first week which outlines the proj
 [![Demo Video Project Plan](https://i.ibb.co/DYvZhb7/Demo1.png)](https://www.youtube.com/watch?v=Asisfa8DpvA&feature=youtu.be)
 
 #### Week Two: Continuous Integration with CircleCI
+For the second week of the project the goal was to setup a GitHub repository and integrate it with CircleCI so that the
+application will be ready for Continuous Deployment. Development, features, staging, and production branches were created.
+Test code was developed in a virtual environment that was setup in Google Cloud Shell. A Makefile was created that installed 
+all dependencies for the virtual environment, and code testing tools were installed as well. 
+The code was pushed to the GitHub repository where testing was implemented and code was validated using CircleCI. 
+The following is the sprint report from that week:
 
 ![Sprint 2](https://i.ibb.co/4WYmGx1/Week2-Sprint.png)
+
+The demo video can be viewed by clicking the image below:
+
+[![Demo Video CircleCi](https://i.ibb.co/Jyw4hRy/Demo2.png)](https://www.youtube.com/watch?v=Cc92bTm7TZw&feature=youtu.be)
+
+While the goal to create a GitHub repository and integrate it with CircleCI was successful, the goal of implementing a
+commandline tool was not met, as Cloud Shell was set to be used for local development, and it did not seem necessary for 
+this phase of the project.
+
+#### Week Three: Create Initial Data Pipeline for Project and Create Application Skeleton
+The third week of the project involved creating a data pipeline for the project and build out an application 
+skeloton that serves out data as a JSON response. The first step of the process was to move the data into Google Cloud
+Storage, and figure out how to read the data from the Google Cloud Storage API. A CSV file was uploaded via 
+Google Platform's UI, and code was developed to read the data from Cloud Storage, aggregate the data into a dataframe,
+and transform the data in JSON format.A Jupyter notebook was used to develop and test out the code. 
+Once the code was validated, the necessary files to deploy the script onto Google App Engine were created. 
+This included the YAML file to specify how to deploy the application, requirements.txt for the modules that were needed 
+to be installed, and Makefile to install the modules and test the code. The application was built using Flask, and the 
+code to read the data, aggregate, and serve the results as a JSON response was integrated into the application script. 
+The application script was tested by deploying it in a virtual environment. Once the application was validated, all 
+necessary files to deploy the application were pushed to GitHub. After all tests passed in CircleCi the application
+was deployed onto Google App Engine.
+
+The following is the sprint report from that week:
+
+![Sprint 3](https://i.ibb.co/0mH4VfD/Week3-Sprint.png)
+
+The demo video can be viewed by clicking the image below:
+
+[![Demo Video Pipe/App](https://i.ibb.co/4ND2Lv3/Demo3.png)](https://www.youtube.com/watch?v=yTqjymDWoI8&feature=youtu.be)
+
+Although the pipeline and app deployment was successful, the feature to read data from Cloud Storage and receive a
+JSON response of the data was not used. This was due to latency and issues with timeouts. It was also decided 
+that the data should be read from a database rather than storage.
+
+#### Week 4: Develop an ETL Pipeline that Ingests Data into BigQuery and Schedule Recurring Cron Job to Batch Update the Data
+
+
+
 References:
 1. https://newsroom.transunion.com/consumers-poised-to-continue-strong-credit-activity-this-holiday-season/
 2. https://www.newyorkfed.org/newsevents/news/research/2020/20200211
