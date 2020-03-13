@@ -40,7 +40,7 @@ def home():
     <h2>This app predicts if a credit cardholder will default
     on their next payment.</h2>
     <a href="https://staging-dot-ccdr-265306.appspot.com/apidocs">
-    <button class="button">Click to Get Predictions</button></a>
+    <button class="button">Click to Make Predictions</button></a>
     </div>
     </body>
     </html>
@@ -78,6 +78,8 @@ def list_attributes():
 @app.route('/cardholder/predictions/api', methods=['GET'])
 def get_predictions():
     """ Make credit card default predictions on cardholder data
+    Documentation:
+
     Prediction data is based on a research case on customer defaults on credit card payments in Taiwan from
     April 2005 to September 2005. Through this API, predictions made can be used to help issuers determine
     who to give a credit card to and what limit to provide.
@@ -87,7 +89,7 @@ def get_predictions():
     All currency has been converted to US dollars.
 
     Names and Descriptions:
-    
+
     ID: ID of each client
     LIMIT_BAL: Amount of given credit in US dollars (includes individual and family/supplementary credit)
     SEX: Gender (1=male, 2=female)
@@ -120,6 +122,11 @@ def get_predictions():
 
     http://inseaddataanalytics.github.io/INSEADAnalytics/CourseSessions/ClassificationProcessCreditCardDefault.html
 
+    Example Prediction:
+
+    fields (case-insensitive): ID, AGE, LIMIT_BAL
+    where (case-insensitive): AGE = 30
+    and_op (case-insensitive): LIMIT_BAL > 1000
     ---
         consumes: application/json
         parameters:
