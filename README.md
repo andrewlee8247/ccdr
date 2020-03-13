@@ -275,7 +275,7 @@ the Kubernetes Engine.
 
 #### Week 10: Finish Final Stages of MVP and Deploy into Production
 
-![Application](https://imgur.com/HejSNqg)
+![Imgur](https://i.imgur.com/HejSNqg.gifv)
 
 References:
 1. https://newsroom.transunion.com/consumers-poised-to-continue-strong-credit-activity-this-holiday-season/
