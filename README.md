@@ -78,7 +78,7 @@ The following is a demo video created for the first week which outlines the proj
 
 #### Week Two: Continuous Integration with CircleCI
 
-
+![Sprint 2](https://i.ibb.co/4WYmGx1/Week2-Sprint.png)
 References:
 1. https://newsroom.transunion.com/consumers-poised-to-continue-strong-credit-activity-this-holiday-season/
 2. https://www.newyorkfed.org/newsevents/news/research/2020/20200211
