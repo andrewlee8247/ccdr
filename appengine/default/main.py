@@ -1,7 +1,4 @@
 from flask import Flask, jsonify, request
-from google.cloud import storage
-import pandas as pd
-from io import BytesIO
 from ccdr_lib import predictions
 from flasgger import Swagger
 
@@ -40,30 +37,14 @@ def home():
     </head>
     <body>
     <div class="content">
-    <h2>This app will predict if a cardholder will default
+    <h2>This app predicts if a credit cardholder will default
     on their next payment.</h2>
-    <a href="https://ccdr-265306.appspot.com/cardholder/data">
-    <button class="button">Click to View Raw Data</button></a>
     <a href="https://ccdr-265306.appspot.com/apidocs">
-    <button class="button">Click to Make Predictions</button></a>
+    <button class="button">Click to Get Predictions</button></a>
     </div>
     </body>
     </html>
     """
-
-
-@app.route('/cardholder/data')
-def raw_data():
-    """Returns raw cardholder data as JSON response"""
-    storage_client = storage.Client()
-    bucket = storage_client.get_bucket("ccdr-raw")
-    blobs = bucket.list_blobs()
-    data = pd.DataFrame()
-    for blob in blobs:
-        file = blob.download_as_string()
-        data = data.append(pd.read_csv(BytesIO(file)))
-    data.reset_index(drop=True, inplace=True)
-    return jsonify(data.to_dict())
 
 
 @app.route('/cardholder/attributes/api', methods=['GET'])
@@ -79,18 +60,17 @@ def list_attributes():
 
     """
 
-    attributes = {'ID': 'Int', 'AGE': 'Int', 'SEX': 'String/Float',
-                  'EDUCATION': 'String/Float', 'MARRIAGE': 'String/Float',
+    attributes = {'ID': 'String', 'AGE': 'Integer', 'SEX': 'Integer',
+                  'EDUCATION': 'Integer', 'MARRIAGE': 'Integer',
                   'LIMIT_BAL': 'Float', 'BILL_AMT1': 'Float',
                   'BILL_AMT2': 'Float', 'BILL_AMT3': 'Float',
                   'BILL_AMT4': 'Float', 'BILL_AMT5': 'Float',
                   'BILL_AMT6': 'Float', 'PAY_AMT1': 'Float',
                   'PAY_AMT2': 'Float', 'PAY_AMT3': 'Float',
                   'PAY_AMT4': 'Float', 'PAY_AMT5': 'Float',
-                  'PAY_AMT6': 'Float', 'PAY_0': 'String/Float',
-                  'PAY_2': 'String/Float', 'PAY_3': 'String/Float',
-                  'PAY_4': 'String/Float', 'PAY_5': 'String/Float',
-                  'PAY_6': 'String/Float'}
+                  'PAY_AMT6': 'Float', 'PAY_0': 'Integer', 'PAY_2': 'Integer',
+                  'PAY_3': 'Integer', 'PAY_4': 'Integer', 'PAY_5': 'Integer',
+                  'PAY_6': 'Integer'}
 
     return jsonify({'attributes': attributes})
 
@@ -98,6 +78,47 @@ def list_attributes():
 @app.route('/cardholder/predictions/api', methods=['GET'])
 def get_predictions():
     """ Make credit card default predictions on cardholder data
+    Prediction data is based on a research case on customer defaults on credit card payments in Taiwan from
+    April 2005 to September 2005. Through this API, predictions made can be used to help issuers determine
+    who to give a credit card to and what limit to provide.
+
+    Predictions are based on information from 24 variables. Details are outlined below.
+    To get predictions, use the get attributes API to see what inputs are needed to get the results.
+    All currency has been converted to US dollars.
+
+    Names and Descriptions:
+    
+    ID: ID of each client
+    LIMIT_BAL: Amount of given credit in US dollars (includes individual and family/supplementary credit)
+    SEX: Gender (1=male, 2=female)
+    EDUCATION: (1=graduate school, 2=university, 3=high school, 4=others)
+    MARRIAGE: Marital status (1=married, 2=single, 3=others)
+    AGE: Age in years
+    PAY_0: Repayment status in September 2005 (-2=no consumption, -1=pay duly, 0=the use of revolving credit, 
+    1=payment delay for one month, 2=payment delay for two months, … 8=payment delay for eight months, 
+    9=payment delay for nine months and above)
+    PAY_2: Repayment status in August 2005 (scale same as above)
+    PAY_3: Repayment status in July 2005 (scale same as above)
+    PAY_4: Repayment status in June 2005 (scale same as above)
+    PAY_5: Repayment status in May 2005 (scale same as above)
+    PAY_6: Repayment status in April 2005 (scale same as above)
+    BILL_AMT1: Amount of bill statement in September 2005 (US dollar)
+    BILL_AMT2: Amount of bill statement in August 2005 (US dollar)
+    BILL_AMT3: Amount of bill statement in July 2005 (US dollar)
+    BILL_AMT4: Amount of bill statement in June 2005 (US dollar)
+    BILL_AMT5: Amount of bill statement in May 2005 (US dollar)
+    BILL_AMT6: Amount of bill statement in April 2005 (US dollar)
+    PAY_AMT1: Amount of previous payment in September 2005 (US dollar)
+    PAY_AMT2: Amount of previous payment in August 2005 (US dollar)
+    PAY_AMT3: Amount of previous payment in July 2005 (US dollar)
+    PAY_AMT4: Amount of previous payment in June 2005 (US dollar)
+    PAY_AMT5: Amount of previous payment in May 2005 (US dollar)
+    PAY_AMT6: Amount of previous payment in April 2005 (US dollar)
+    default_payment_next_month: Default payment (1=yes, 0=no)
+
+    To get detailed documentation on classifications and the study visit:
+
+    http://inseaddataanalytics.github.io/INSEADAnalytics/CourseSessions/ClassificationProcessCreditCardDefault.html
 
     ---
         consumes: application/json

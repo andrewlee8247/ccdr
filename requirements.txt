@@ -13,3 +13,5 @@ bs4
 flasgger
 google-api-python-client
 locust
+pyarrow
+matplotlib

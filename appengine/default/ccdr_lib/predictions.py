@@ -17,7 +17,7 @@ def get_predict_query(fields=None, where=None, and_op=None):
     database = 'ccdr-265306'
     client = bigquery.Client(database)
     dataset = client.dataset('ccdr_database')
-    table = dataset.table('credit_cardholder_data')
+    table = dataset.table('cardholder_data')
     if table is None:
         pass
     if fields is None:
@@ -40,8 +40,8 @@ def get_predict_query(fields=None, where=None, and_op=None):
       ML.PREDICT(MODEL `ccdr-265306.ccdr_database.class_model_5`,
         (
         SELECT
-          CAST(ID AS INT64) AS ID,
-          CAST(AGE AS INT64) AS AGE,
+          ID,
+          AGE,
           CAST(SEX AS string) AS SEX,
           CAST(EDUCATION AS string) AS EDUCATION,
           CAST(MARRIAGE AS string) AS MARRIAGE,
@@ -65,12 +65,12 @@ def get_predict_query(fields=None, where=None, and_op=None):
           CAST(PAY_5 AS string) AS PAY_5,
           CAST(PAY_6 AS string) AS PAY_6
         FROM
-          `ccdr_database.credit_cardholder_data`""" \
+          `ccdr_database.cardholder_data`""" \
     + str(where) \
     + str(and_op) \
     + """
           ),
-           STRUCT(0.2430 AS threshold)
+           STRUCT(0.249 AS threshold)
         )
     """
     query_job = client.query(query)
@@ -95,10 +95,13 @@ def predict_to_dict(fields=None, where=None, and_op=None):
         clean_list.append(init_list)
 
     if fields is None:
-        column_list = ['predicted_default_payment_next_month', 'prob_of_default', 'prob_of_no_default',
-                       'ID', 'AGE', 'SEX', 'EDUCATION', 'MARRIAGE', 'LIMIT_BAL', 'BILL_AMT1', 'BILL_AMT2',
-                       'BILL_AMT3', 'BILL_AMT4', 'BILL_AMT5', 'BILL_AMT6', 'PAY_AMT1', 'PAY_AMT2', 'PAY_AMT3',
-                       'PAY_AMT4', 'PAY_AMT5', 'PAY_AMT6', 'PAY_0', 'PAY_2', 'PAY_3', 'PAY_4', 'PAY_5', 'PAY_6']
+        column_list = ['predicted_default_payment_next_month',
+                       'prob_of_default', 'prob_of_no_default', 'ID', 'AGE',
+                       'SEX', 'EDUCATION', 'MARRIAGE', 'LIMIT_BAL',
+                       'BILL_AMT1', 'BILL_AMT2', 'BILL_AMT3', 'BILL_AMT4',
+                       'BILL_AMT5', 'BILL_AMT6', 'PAY_AMT1', 'PAY_AMT2',
+                       'PAY_AMT3', 'PAY_AMT4', 'PAY_AMT5', 'PAY_AMT6', 'PAY_0',
+                       'PAY_2', 'PAY_3', 'PAY_4', 'PAY_5', 'PAY_6']
     else:
         column_list = fields.replace(' ', '').upper().split(',')
         column_list.insert(0, 'predicted_default_payment_next_month')
