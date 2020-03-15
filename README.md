@@ -35,6 +35,12 @@ the application employs Continuous Integration using CircleCI, and Continuous De
 The working MVP can be used as a component for a fully featured product that assists in risk management for credit card 
 issuers. 
 
+### System Architecture:
+
+![System Architecture](https://i.ibb.co/bR7H9Z8/System-Architecture.png)
+
+1.    
+
 ### Project Development:
 The project went through different stages of development which started from a planning phase, development phase, 
 testing phase, and deployment phase. The MVP was developed over a ten week project plan. Weekly milestones were created in 
@@ -211,7 +217,7 @@ development to production. Files that were being worked on locally were updated 
 to the development branch on GitHub. After testing and validation from CircleCI, the branch was then merged with 
 the production branch, and updates were automatically deployed onto App Engine. Due to time constraints, only development
 and production environments were used for testing and demonstration. However, the process from development to staging, 
-then to production, was successfully implemented during the load testing phase. 
+then to production, was successfully implemented during the load testing phase and deployment phase. 
 
 The following is a diagram of the process:
 
