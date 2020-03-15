@@ -37,9 +37,21 @@ issuers.
 
 ### System Architecture:
 
-![System Architecture](https://i.ibb.co/bR7H9Z8/System-Architecture.png)
+![System Architecture](https://i.ibb.co/wMTwwsb/System-Architecture.png)
 
-1.    
+#### System Elements:
+1. Using Google Cloud Scheduler, a recurring cron job is set up where a message is sent to a topic on Google Pub/Sub. With Google 
+Stackdriver, all system events are logged and monitored. All error logs, health check failures, and latency issues are sent as alerts 
+via email and Slack.
+2. The message that is sent to Pub/Sub, sets off a trigger to run a Google Cloud Function. The Cloud Function runs code that proceeds
+to scrape all credit card default data files from the UCI machine learning repository, and uploads them to Google Cloud Storage. 
+3. Once files are uploaded to Cloud Storage, another Cloud Function is triggered that runs code to read the data from the recently uploaded
+files. The data is cleaned, transformed, and uploaded back to Cloud Storage as a Parquet file. 
+4. A third Cloud Function is then triggered that batch processes the Parquet file and loads the data into a database in BigQuery.
+5. Using the application deployed to Google App Engine, users can run predictions on the newly updated data. The application utilizes
+BigQuery ML to serve out predictions as a JSON response. Users can interface with the application via a UI setup with Swagger. 
+The application also serves out predictions from HTTP requests via REST API with a JSON payload, and can be plugged in to any front-end 
+UI.             
 
 ### Project Development:
 The project went through different stages of development which started from a planning phase, development phase, 
