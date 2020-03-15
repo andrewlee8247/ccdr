@@ -49,9 +49,11 @@ to scrape all credit card default data files from the UCI machine learning repos
 files. The data is cleaned, transformed, and uploaded back to Cloud Storage as a Parquet file. 
 4. A third Cloud Function is then triggered that batch processes the Parquet file and loads the data into a database in BigQuery.
 5. Using the application deployed to Google App Engine, users can run predictions on the newly updated data. The application utilizes
-BigQuery ML to serve out predictions as a JSON response. Users can interface with the application via a UI setup with Swagger. 
+BigQuery ML to serve out predictions as a JSON response. Users can interface with the application via a UI set up with Swagger. 
 The application also serves out predictions from HTTP requests via REST API with a JSON payload, and can be plugged in to any front-end 
-UI.             
+UI. 
+
+![Application](https://i.imgur.com/HejSNqg.gif)
 
 ### Project Development:
 The project went through different stages of development which started from a planning phase, development phase, 
@@ -293,7 +295,7 @@ the Kubernetes Engine.
 
 #### Week 10: Finish Final Stages of MVP and Deploy into Production
 
-![Application](https://i.imgur.com/HejSNqg.gif)
+
 
 References:
 1. https://newsroom.transunion.com/consumers-poised-to-continue-strong-credit-activity-this-holiday-season/
