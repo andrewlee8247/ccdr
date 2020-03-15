@@ -5,7 +5,7 @@
 The goal of this project was to build a Minimum Viable Product (MVP) for an application that predicts whether or not
 a credit cardholder will default on their next payment. According to the TransUnion's Industry Insights Report, the credit
 card deliquency rate reached 1.81% in Q3 2019, rising from 1.71% in Q3 of 2018 <sup>1</sup>. In addition, the Federal Reserve Bank of
-New York reported that credit card delinquencies that were at least 90 days late, were are a rate of about 5.32% in the fourth
+New York reported that credit card delinquencies that were at least 90 days late, was at 5.32% in the fourth
 quarter of 2019, up from 5.16% in the previous quarter <sup>2</sup>. The table below shows the deliquency rates by age group 
 from Q1 2018: 
 
@@ -30,7 +30,7 @@ predictions were served out through an application that was built and deployed u
 models were trained using Google BigQuery ML. The MVP is currently setup to automatically ingest new data from the machine
 learning repository on a daily basis, where updated data is cleaned, transformed, and loaded into Google Cloud Storage, 
 which is then batch processed into a database setup in Google BigQuery. The application has the capablity of making new 
-predictions on the updated data through an API that was built to interact with the database and BigQuery ML. In addition, 
+predictions on updated data through an API that was built to interact with the database and BigQuery ML. In addition, 
 the application employs Continuous Integration using CircleCI, and Continuous Delivery using Google Cloud Build. 
 The working MVP can be used as a component for a fully featured product that assists in risk management for credit card 
 issuers. 
@@ -63,7 +63,7 @@ UI.
 The project went through different stages of development which started from a planning phase, development phase, 
 testing phase, and deployment phase. The MVP was developed over a ten week project plan. Weekly milestones were created in 
 Jira, which was later used for starting weekly sprints, adding tasks, and tracking progress. The following provides a 
-detailed explanation of the weekly goals that were setup and the process used to complete them.  
+detailed explanation of the weekly goals that were set up and the process used to complete them.  
 
 #### Week One: Initial Planning
 The initial planning phase went through a process of deciding project goals, discovering which data will be used for
@@ -71,8 +71,8 @@ model and application development, and weekly scheduling of milestones and demo 
 [here.](https://docs.google.com/presentation/d/1jdptGT_hq46K5u7wzmf00m9FIMfsi3x5pmDLyLjKjNA/edit#slide=id.p)
 The decision was made to focus the project on the risks associated with credit card clients based on demographics, 
 past payment history, and history of deliquency. Data from the UCI machine learning repository was chosen as it provided 
-significant details on credit cardholders, and was a good baseline to build out a MVP. Exploratory Data Analysis (EDA) 
-of the data showed that median balance was around 4670.25 US dollars, and the median age was 34 years old. About 46.77% of
+significant details on credit cardholders, and was a good baseline to build out an MVP. Exploratory Data Analysis (EDA) 
+of the data showed that median balance was around 4,670.25 US dollars, and the median age was 34 years old. About 46.77% of
 the cardholders were university educated, and 60.37% were female.
 
 Additional details showed that the percentage of defaults by age group were higher among younger cardholders, the highest
@@ -92,8 +92,8 @@ likely due to the fact that there was more cardholder data on females than males
 ![Default Percentages by Gender](https://i.ibb.co/yF8rV55/Percentage-of-Default-By-Gender.png)
 
 Weekly milestones and tasks were created in Jira. Stories describing weekly objectives were created that was scheduled
-for a ten week timeframe from start to deployement. For every week a sprint was started and tasks were added to detail
-each step that was needed to complete each sprint. Upon completion, sprints were marked as completed on the project 
+for a ten week timeframe from start to deployement. For every week, a sprint was started and tasks were added to detail
+each step needed to complete each sprint. Upon completion, sprints were marked as completed on the project 
 board.
 
 The following is a demo video created for the first week which outlines the project plan:
@@ -120,8 +120,8 @@ this phase of the project.
 
 #### Week Three: Create Initial Data Pipeline for Project and Create Application Skeleton
 The third week of the project involved creating a data pipeline for the project and build out an application 
-skeloton that serves out data as a JSON response. The first step of the process was to move the data into Google Cloud
-Storage, and figure out how to read the data from the Google Cloud Storage API. A CSV file was uploaded via 
+skeleton that serves out data as a JSON response. The first step of the process was to move the data into Google Cloud
+Storage, and figure out how to read the data from the Google Cloud Storage API. A CSV file was uploaded using the
 Google Platform's UI, and code was developed to read the data from Cloud Storage, aggregate the data into a dataframe,
 and transform the data in JSON format.A Jupyter notebook was used to develop and test out the code. 
 Once the code was validated, the necessary files to deploy the script onto Google App Engine were created. 
@@ -170,7 +170,7 @@ The demo video can be viewed by clicking the image below:
 
 [![Demo Video ETL](https://i.ibb.co/XX0DxYD/Demo4.png)](https://www.youtube.com/watch?v=fP56XtkbpIU&feature=youtu.be)
 
-While the pipeline is fully functional and works as intended, it is recommended that the process should be changed
+While the pipeline was fully functional and worked as intended, it is recommended that the process should be changed
 as the workflow will not be able to handle big data workloads. Cloud Functions timeout at 9 minutes. Therefore, for large 
 webscraping and batch processing jobs, it is advisable that VM instances and/or services such as Google
 Data Flow is used.
@@ -179,7 +179,7 @@ Data Flow is used.
 A machine learning model was trained with the data using BigQuery ML, and the application was updated to deliver
 prediction results as a JSON response through an API that was created using Flask. The first step was to build and 
 evaluate the model using BiqQuery ML. A logistic regression model was therefore built and trained from the cardholder
-database. The model was evaluated using accuracy, precision and recall, F1, and AUC scores. After evaluation an initial 
+database. The model was evaluated using accuracy, precision and recall, F1, and AUC scores. After evaluation, an initial 
 prediction was made to make sure that the model was functional. A script was then created to interact with the BigQuery ML
 API and deliver default prediction results in JSON format. The script that was created provided optional parameters to 
 filter based on fields such as cardholder age, limit balance, gender, and so on. Additionally, the script included 
@@ -251,7 +251,7 @@ The demo video can be viewed by clicking the image below:
 [![Demo Video CD](https://i.ibb.co/PxxMmDJ/Demo7.png)](https://www.youtube.com/watch?v=QaKOCyyftqA&feature=youtu.be)
 
 #### Week 8: Test Application Component APIS and Create Cost Forecast with BigQuery ML and Billing API
-APIs used to build application components were tested and validated that they were working properly.APIs used include:
+APIs used to build application components were tested and validated that they were working properly. APIs used include:
 Google Cloud Storage, BigQuery, and BigQuery ML. A cost forecast was made using BigQuery ML and Google's billing export
 module, which exports daily usage to BigQuery. As development of the MVP was using a free tier account, no costs were
 predicted.
