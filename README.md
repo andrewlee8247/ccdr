@@ -344,7 +344,7 @@ The demo video can be viewed by clicking the image below:
 
 While the application was successfully deployed and the MVP was fully functional, there was an issue that was already mentioned 
 regarding timeouts. To resolve the issue with timeouts, the configuration file may need to be set up with manual scaling
-rules, or App Engine Flex should be used. A better option would be to deploy the application using the Kubernetes Engine.  
+rules, or App Engine Flex should be used. A better option would be to deploy the application using the Kubernetes Engine. 
 However, due to cost reasons, and given that the project objective was to deliver a Minimum Viable Product, using the 
 standard service was seen as sufficient enough to satisfy the purpose of the project.
 
@@ -359,7 +359,7 @@ on credit card default risk is one that holds significant value, and it is likel
 Assessing risk through predictive analytics is an endeavor that can positively affect an issuer's ROI.   
 
 
-References:
+#### References:
 1. https://newsroom.transunion.com/consumers-poised-to-continue-strong-credit-activity-this-holiday-season/
 2. https://www.newyorkfed.org/newsevents/news/research/2020/20200211
 3. https://www.cnbc.com/select/us-credit-card-debt-hits-all-time-high/
