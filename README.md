@@ -42,7 +42,8 @@ issuers.
 #### System Elements:
 1. Using Google Cloud Scheduler, a recurring cron job is set up where a message is sent to a topic on Google Pub/Sub. With Google 
 Stackdriver, all system events are logged and monitored. All error logs, health check failures, and latency issues are sent as alerts 
-via email and Slack.
+via email and Slack. All data is encrypted with Google-managed encryption keys, which uses AES 256 encryption for data at rest. System
+components satisfy the priniciple of least security 
 2. The message that is sent to Pub/Sub, sets off a trigger to run a Google Cloud Function. The Cloud Function runs code that proceeds
 to scrape all credit card default data files from the UCI machine learning repository, and uploads them to Google Cloud Storage. 
 3. Once files are uploaded to Cloud Storage, another Cloud Function is triggered that runs code to read the data from the recently uploaded
@@ -206,11 +207,12 @@ development progress was ahead of schedule.
 
 #### Week 6: Create a Multi-Classification Model Using AutoML
 AutoML was used to create a mult-classification model on what a cardholder's repayment status will be in the 6th
-month. To implement this, data was extracted and transformed to specify repayment statuses in text format. That is,
-the data uses integers to indicate repayment status, such as -1 for 'pay duly'. These were transformed from 
-integer coding to text, as AutoML would not function properly. A model was then trained and evaluated for predictive 
-accuracy. Predictions were further made based on the data, and compared with the actual data. Accuracy results showed
-that they were in line with the precision score from model evaluation. 
+month. To implement this, data was extracted and transformed to specify repayment statuses as text labels. That is,
+to indicate repayment status, the data was numerically encoded, such as -1 for 'pay duly'. These were transformed from 
+numerically encoded values to text labels, as AutoML would not function properly due to the fact that zero values held meaning
+and were ignored in training. A model was then trained and evaluated for predictive accuracy. Predictions were further made 
+based on the data, and compared with the actual data. Accuracy results showed that they were in line with the precision score 
+from model evaluation. 
 
 The following is the sprint report from that week:
 
@@ -296,8 +298,20 @@ for optimal performance. It is recommended that a future iteration should use Ap
 the Kubernetes Engine.
 
 #### Week 10: Finish Final Stages of MVP and Deploy into Production
-
-
+Finishing touches were made to the application before deployment. Changes were made to the application code and system architecture 
+for better functionality and usability. The following changes were made:
+* An additional Cloud Function was created to clean, transform, and upload data back into Cloud Storage as a Parquet file.
+    * An issue was detected with mixed datatypes. Data types are converted to their proper formats.
+    * Numerically encoded categorical values are changed for certain categorical features. For example, values 0, 5, and 6 for education are
+    replaced to 4, indicating "Other" rather than "Unknown".
+    * Dollar amounts are converted from Taiwanese dollars to US dollars for easier readability.
+    * Unique IDs are created to prevent duplicates.
+    * Data is transformed into Parquet format for better efficiency.
+* Cloud Function to batch process data into BigQuery was updated and configured to load Parquet files.
+    * Table schema was also adjusted to be compatible with the changed data types.
+* Model in BigQuery ML was retrained with the transformed data and evaluated.
+* Application files were updated to work with the changes in the data and the updated ML model.
+           
 
 References:
 1. https://newsroom.transunion.com/consumers-poised-to-continue-strong-credit-activity-this-holiday-season/
