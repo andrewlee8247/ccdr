@@ -53,6 +53,8 @@ BigQuery ML to serve out predictions as a JSON response. Users can interface wit
 The application also serves out predictions from HTTP requests via REST API with a JSON payload, and can be plugged in to any front-end 
 UI. 
 
+#### Application:
+
 ![Application](https://i.imgur.com/HejSNqg.gif)
 
 ### Project Development:
