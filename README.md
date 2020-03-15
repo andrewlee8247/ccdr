@@ -5,7 +5,7 @@
 The goal of this project was to build a Minimum Viable Product (MVP) for an application that predicts whether or not
 a credit cardholder will default on their next payment. According to the TransUnion's Industry Insights Report, the credit
 card deliquency rate reached 1.81% in Q3 2019, rising from 1.71% in Q3 of 2018.<sup>1</sup> In addition, the Federal Reserve Bank of
-New York reported that credit card delinquencies that were at least 90 days late, was at 5.32% in the fourth
+New York reported that credit card delinquencies that were at least 90 days late were at 5.32% in the fourth
 quarter of 2019, up from 5.16% in the previous quarter.<sup>2</sup> The table below shows the deliquency rates by age group 
 from Q1 2018: 
 
