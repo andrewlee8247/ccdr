@@ -152,11 +152,11 @@ repository of all possible files using Beautiful Soup, and uploaded the files in
 Function was created that batch processed the data from Cloud Storage into BigQuery. To automate the process, a cron job 
 was setup through Google Cloud Scheduler, and a topic was created in Google Pub/Sub. 
 
-From Cloud Scheduler, the cron is set to ping the topic on Pub/Sub on a daily basis. Once the topic is pinged, 
-the Cloud Function that is setup to scrape the files from the machine learning repository and upload them to Cloud 
-Storage is set to trigger and run. After the Cloud Function finishes the process and the files are uploaded to Cloud 
-Storage the next function is set to trigger afterwards. This function then updates the table in BigQuery and the batch 
-process is completed.
+From Cloud Scheduler, the cron was set to ping the topic on Pub/Sub on a daily basis. Once the topic was pinged, 
+the Cloud Function that was set up to scrape the files from the machine learning repository and upload them to Cloud 
+Storage was set to trigger and run. After the Cloud Function finished the process and the files were uploaded to Cloud 
+Storage, the next function was set to trigger afterwards. This function then updated the table in BigQuery and the batch 
+process was completed.
 
 The following is a diagram of the process:
 
@@ -229,8 +229,8 @@ develop a functional application that serves out prediction results. As noted in
 AutoML is considered in a future implementation.
 
 #### Week 7: Deploy Application onto Development, Staging, and Production Environments
-Using Google Cloud Source Repositories and Cloud Build, the application was setup for Continuous Delivery.
-The first step was to setup Cloud Source Repositories and integrate it with GitHub. Cloud Build was then setup
+Using Google Cloud Source Repositories and Cloud Build, the application was set up for Continuous Delivery.
+The first step was to setup Cloud Source Repositories and integrate it with GitHub. Cloud Build was then set up
 with build triggers that were set to build and deploy application changes pushed to GitHub automatically from 
 development to production. Files that were being worked on locally were updated with application updates and pushed
 to the development branch on GitHub. After testing and validation from CircleCI, the branch was then merged with 
@@ -302,12 +302,12 @@ use App Engine Flex or a deployment using the Kubernetes Engine.
 Finishing touches were made to the application before deployment. Changes were made to the application code and system architecture 
 for better functionality and usability. The following changes were made:
 * An additional Cloud Function was created to clean, transform, and upload data back into Cloud Storage as a Parquet file.
-    * An issue was detected with mixed datatypes. Data types are converted to their proper formats.
-    * Numerically encoded categorical values are changed for certain categorical features. For example, values 0, 5, and 6 for education are
+    * An issue was detected with mixed datatypes. Data types were converted to their proper formats.
+    * Numerically encoded categorical values were changed for certain categorical features. For example, values 0, 5, and 6 for education were
     replaced to 4, indicating "Other" rather than "Unknown".
-    * Dollar amounts are converted from Taiwanese dollars to US dollars for easier readability.
-    * Unique IDs are created to prevent duplicates.
-    * Data is transformed into Parquet format for better efficiency.
+    * Dollar amounts were converted from Taiwanese dollars to US dollars for easier readability.
+    * Unique IDs were created to prevent duplicates.
+    * Data was transformed into Parquet format for better efficiency.
 * Cloud Function to batch process data into BigQuery was updated and configured to load Parquet files.
     * Table schema was also adjusted to be compatible with the changed data types.
 * Model in BigQuery ML was retrained with the transformed data and evaluated.
@@ -332,9 +332,17 @@ to only access areas that are needed.
 
 Once all checklist items were reviewed and completed, the application was ready for deployment into production. The development
 branch was merge into production and pushed to GitHub. A trigger was set off in Cloud Build and the application was 
-automatically deployed to App Engine. 
+automatically deployed to App Engine.
 
-While the application was successfully deployed and the MVP is fully functional, there is an issue that was already mentioned 
+The following is the sprint report from that week:
+
+![Sprint 10](https://i.ibb.co/S0tpf4X/Week10-Sprint.png)
+
+The demo video can be viewed by clicking the image below:
+
+[![Demo Video Deploy](https://i.ibb.co/ChqY0nG/Demo10.png)](https://www.youtube.com/watch?v=TQSE6PVuLF0&feature=youtu.be)
+
+While the application was successfully deployed and the MVP was fully functional, there was an issue that was already mentioned 
 regarding timeouts. To resolve the issue with timeouts, the configuration file may need to be set up with manual scaling
 rules, or App Engine Flex should be used. A better option would be to deploy the application using the Kubernetes Engine.  
 However, due to cost reasons, and given that the project objective was to deliver a Minimum Viable Product, using the 
