@@ -4,24 +4,24 @@
 ### Executive Summary:
 The goal of this project was to build a Minimum Viable Product (MVP) for an application that predicts whether or not
 a credit cardholder will default on their next payment. According to the TransUnion's Industry Insights Report, the credit
-card deliquency rate reached 1.81% in Q3 2019, rising from 1.71% in Q3 of 2018 <sup>1</sup>. In addition, the Federal Reserve Bank of
-New York reported that credit card delinquencies that were at least 90 days late, were are a rate of about 5.32% in the fourth
-quarter of 2019, up from 5.16% in the previous quarter <sup>2</sup>. The table below shows the deliquency rates by age group 
+card deliquency rate reached 1.81% in Q3 2019, rising from 1.71% in Q3 of 2018.<sup>1</sup> In addition, the Federal Reserve Bank of
+New York reported that credit card delinquencies that were at least 90 days late were at 5.32% in the fourth
+quarter of 2019, up from 5.16% in the previous quarter.<sup>2</sup> The table below shows the deliquency rates by age group 
 from Q1 2018: 
 
 ![90+ Deliquency Age Demographics](https://i.ibb.co/X86NjGP/90-day-deliquency-demographics.png)
 
 Data from the Federal Reserve Bank of New York also indicated that credit card debt hit an all time high of $930 billion in
-the final quarter of 2019 <sup>3</sup>. This was a $46 billion increase from the prior quarter. As credit card debt continues 
+the final quarter of 2019.<sup>3</sup> This was a $46 billion increase from the prior quarter. As credit card debt continues 
 to rise it is evident that the rate of delinquencies may continue to rise as well. From a credit card issuer's standpoint,
 it is well worth the investment to employ practices that implement predictive analytics to gauge the risk of possible 
 defaults on payments to guide the rate of credit card issuance based on certain factors. 
 
 For the project, data was taken from a study conducted in Taiwan from April 2005 to September 2005 on credit card clients
 to determine the likelihood of defaults based on various indicators. The data is publicly available from the UCI machine
-learning repository <sup>4</sup>. The dataset contains 30,000 observations, and includes 23 explanatory variables and 
+learning repository.<sup>4</sup> The dataset contains 30,000 observations, and includes 23 explanatory variables and 
 1 response variable, which is a binary variable indicating whether or not there was a default on a 
-payment (Yes = 1, No = 2). Details on the variables are as follows:
+payment (Yes = 1, No = 0). Details on the variables are as follows:
 
 ![Default Variables](https://i.ibb.co/0JBpYW3/Default-variables.png)
 
@@ -30,16 +30,40 @@ predictions were served out through an application that was built and deployed u
 models were trained using Google BigQuery ML. The MVP is currently setup to automatically ingest new data from the machine
 learning repository on a daily basis, where updated data is cleaned, transformed, and loaded into Google Cloud Storage, 
 which is then batch processed into a database setup in Google BigQuery. The application has the capablity of making new 
-predictions on the updated data through an API that was built to interact with the database and BigQuery ML. In addition, 
+predictions on updated data through an API that was built to interact with the database and BigQuery ML. In addition, 
 the application employs Continuous Integration using CircleCI, and Continuous Delivery using Google Cloud Build. 
 The working MVP can be used as a component for a fully featured product that assists in risk management for credit card 
 issuers. 
+
+### System Architecture:
+
+![System Architecture](https://i.ibb.co/wMTwwsb/System-Architecture.png)
+
+#### System Elements:
+1. Using Google Cloud Scheduler, a recurring cron job is set up where a message is sent to a topic on Google Pub/Sub. With Google 
+Stackdriver, all system events are logged and monitored. All error logs, health check failures, latency issues, and application status 
+are sent as alerts via email and Slack. All data is encrypted with Google-managed encryption keys, which uses AES 256 encryption for 
+data at rest. System components satisfy the priniciple of least security. 
+2. The message that is sent to Pub/Sub, sets off a trigger to run a Google Cloud Function. The Cloud Function runs code that proceeds
+to scrape all credit card default data files from the UCI machine learning repository, and uploads them to Google Cloud Storage. 
+3. Once files are uploaded to Cloud Storage, another Cloud Function is triggered that runs code to read the data from the recently uploaded
+files. The data is cleaned, transformed, and uploaded back to Cloud Storage as a Parquet file. 
+4. A third Cloud Function is then triggered that batch processes the Parquet file and loads the data into a database in BigQuery.
+5. Using the application deployed to Google App Engine, users can run predictions on the newly updated data. Prediction results
+show whether or not the cardholder will default (Yes = 1, No = 0), and the associated probabilities. The application utilizes
+BigQuery ML to serve out predictions as a JSON response. Users can interface with the application via a UI set up with Swagger. 
+The application also serves out predictions from HTTP requests via REST API with a JSON payload, and can be plugged in to any front-end 
+UI. 
+
+#### Application:
+
+![Application](https://i.imgur.com/HejSNqg.gif)
 
 ### Project Development:
 The project went through different stages of development which started from a planning phase, development phase, 
 testing phase, and deployment phase. The MVP was developed over a ten week project plan. Weekly milestones were created in 
 Jira, which was later used for starting weekly sprints, adding tasks, and tracking progress. The following provides a 
-detailed explanation of the weekly goals that were setup and the process used to complete them.  
+detailed explanation of the weekly goals that were set up and the process used to complete them.  
 
 #### Week One: Initial Planning
 The initial planning phase went through a process of deciding project goals, discovering which data will be used for
@@ -47,8 +71,8 @@ model and application development, and weekly scheduling of milestones and demo 
 [here.](https://docs.google.com/presentation/d/1jdptGT_hq46K5u7wzmf00m9FIMfsi3x5pmDLyLjKjNA/edit#slide=id.p)
 The decision was made to focus the project on the risks associated with credit card clients based on demographics, 
 past payment history, and history of deliquency. Data from the UCI machine learning repository was chosen as it provided 
-significant details on credit cardholders, and was a good baseline to build out a MVP. Exploratory Data Analysis (EDA) 
-of the data showed that median balance was around 4670.25 US dollars, and the median age was 34 years old. About 46.77% of
+significant details on credit cardholders, and was a good baseline to build out an MVP. Exploratory Data Analysis (EDA) 
+of the data showed that median balance was around 4,670.25 US dollars, and the median age was 34 years old. About 46.77% of
 the cardholders were university educated, and 60.37% were female.
 
 Additional details showed that the percentage of defaults by age group were higher among younger cardholders, the highest
@@ -68,8 +92,8 @@ likely due to the fact that there was more cardholder data on females than males
 ![Default Percentages by Gender](https://i.ibb.co/yF8rV55/Percentage-of-Default-By-Gender.png)
 
 Weekly milestones and tasks were created in Jira. Stories describing weekly objectives were created that was scheduled
-for a ten week timeframe from start to deployement. For every week a sprint was started and tasks were added to detail
-each step that was needed to complete each sprint. Upon completion, sprints were marked as completed on the project 
+for a ten week timeframe from start to deployement. For every week, a sprint was started and tasks were added to detail
+each step needed to complete each sprint. Upon completion, sprints were marked as completed on the project 
 board.
 
 The following is a demo video created for the first week which outlines the project plan:
@@ -96,8 +120,8 @@ this phase of the project.
 
 #### Week Three: Create Initial Data Pipeline for Project and Create Application Skeleton
 The third week of the project involved creating a data pipeline for the project and build out an application 
-skeloton that serves out data as a JSON response. The first step of the process was to move the data into Google Cloud
-Storage, and figure out how to read the data from the Google Cloud Storage API. A CSV file was uploaded via 
+skeleton that serves out data as a JSON response. The first step of the process was to move the data into Google Cloud
+Storage, and figure out how to read the data from the Google Cloud Storage API. A CSV file was uploaded using the
 Google Platform's UI, and code was developed to read the data from Cloud Storage, aggregate the data into a dataframe,
 and transform the data in JSON format.A Jupyter notebook was used to develop and test out the code. 
 Once the code was validated, the necessary files to deploy the script onto Google App Engine were created. 
@@ -128,11 +152,11 @@ repository of all possible files using Beautiful Soup, and uploaded the files in
 Function was created that batch processed the data from Cloud Storage into BigQuery. To automate the process, a cron job 
 was setup through Google Cloud Scheduler, and a topic was created in Google Pub/Sub. 
 
-From Cloud Scheduler, the cron is set to ping the topic on Pub/Sub on a daily basis. Once the topic is pinged, 
-the Cloud Function that is setup to scrape the files from the machine learning repository and upload them to Cloud 
-Storage is set to trigger and run. After the Cloud Function finishes the process and the files are uploaded to Cloud 
-Storage the next function is set to trigger afterwards. This function then updates the table in BigQuery and the batch 
-process is completed.
+From Cloud Scheduler, the cron was set to ping the topic on Pub/Sub on a daily basis. Once the topic was pinged, 
+the Cloud Function that was set up to scrape the files from the machine learning repository and upload them to Cloud 
+Storage was set to trigger and run. After the Cloud Function finished the process and the files were uploaded to Cloud 
+Storage, the next function was set to trigger afterwards. This function then updated the table in BigQuery and the batch 
+process was completed.
 
 The following is a diagram of the process:
 
@@ -146,7 +170,7 @@ The demo video can be viewed by clicking the image below:
 
 [![Demo Video ETL](https://i.ibb.co/XX0DxYD/Demo4.png)](https://www.youtube.com/watch?v=fP56XtkbpIU&feature=youtu.be)
 
-While the pipeline is fully functional and works as intended, it is recommended that the process should be changed
+While the pipeline was fully functional and worked as intended, it is recommended that the process should be changed
 as the workflow will not be able to handle big data workloads. Cloud Functions timeout at 9 minutes. Therefore, for large 
 webscraping and batch processing jobs, it is advisable that VM instances and/or services such as Google
 Data Flow is used.
@@ -155,7 +179,7 @@ Data Flow is used.
 A machine learning model was trained with the data using BigQuery ML, and the application was updated to deliver
 prediction results as a JSON response through an API that was created using Flask. The first step was to build and 
 evaluate the model using BiqQuery ML. A logistic regression model was therefore built and trained from the cardholder
-database. The model was evaluated using accuracy, precision and recall, F1, and AUC scores. After evaluation an initial 
+database. The model was evaluated using accuracy, precision and recall, F1, and AUC scores. After evaluation, an initial 
 prediction was made to make sure that the model was functional. A script was then created to interact with the BigQuery ML
 API and deliver default prediction results in JSON format. The script that was created provided optional parameters to 
 filter based on fields such as cardholder age, limit balance, gender, and so on. Additionally, the script included 
@@ -184,11 +208,12 @@ development progress was ahead of schedule.
 
 #### Week 6: Create a Multi-Classification Model Using AutoML
 AutoML was used to create a mult-classification model on what a cardholder's repayment status will be in the 6th
-month. To implement this, data was extracted and transformed to specify repayment statuses in text format. That is,
-the data uses integers to indicate repayment status, such as -1 for 'pay duly'. These were transformed from 
-integer coding to text, as AutoML would not function properly. A model was then trained and evaluated for predictive 
-accuracy. Predictions were further made based on the data, and compared with the actual data. Accuracy results showed
-that they were in line with the precision score from model evaluation. 
+month. To implement this, data was extracted and transformed to specify repayment statuses as text labels. That is,
+to indicate repayment status, the data was numerically encoded, such as -1 for 'pay duly'. These were transformed from 
+numerically encoded values to text labels, as AutoML would not function properly due to the fact that zero values held meaning
+and were ignored in training. A model was then trained and evaluated for predictive accuracy. Predictions were further made 
+based on the data, and compared with the actual data. Accuracy results showed that they were in line with the precision score 
+from model evaluation. 
 
 The following is the sprint report from that week:
 
@@ -204,14 +229,14 @@ develop a functional application that serves out prediction results. As noted in
 AutoML is considered in a future implementation.
 
 #### Week 7: Deploy Application onto Development, Staging, and Production Environments
-Using Google Cloud Source Repositories and Cloud Build, the application was setup for Continuous Delivery.
-The first step was to setup Cloud Source Repositories and integrate it with GitHub. Cloud Build was then setup
+Using Google Cloud Source Repositories and Cloud Build, the application was set up for Continuous Delivery.
+The first step was to setup Cloud Source Repositories and integrate it with GitHub. Cloud Build was then set up
 with build triggers that were set to build and deploy application changes pushed to GitHub automatically from 
 development to production. Files that were being worked on locally were updated with application updates and pushed
 to the development branch on GitHub. After testing and validation from CircleCI, the branch was then merged with 
 the production branch, and updates were automatically deployed onto App Engine. Due to time constraints, only development
 and production environments were used for testing and demonstration. However, the process from development to staging, 
-then to production, was successfully implemented during the load testing phase. 
+then to production, was successfully implemented during the load testing phase and deployment phase. 
 
 The following is a diagram of the process:
 
@@ -226,7 +251,7 @@ The demo video can be viewed by clicking the image below:
 [![Demo Video CD](https://i.ibb.co/PxxMmDJ/Demo7.png)](https://www.youtube.com/watch?v=QaKOCyyftqA&feature=youtu.be)
 
 #### Week 8: Test Application Component APIS and Create Cost Forecast with BigQuery ML and Billing API
-APIs used to build application components were tested and validated that they were working properly.APIs used include:
+APIs used to build application components were tested and validated that they were working properly. APIs used include:
 Google Cloud Storage, BigQuery, and BigQuery ML. A cost forecast was made using BigQuery ML and Google's billing export
 module, which exports daily usage to BigQuery. As development of the MVP was using a free tier account, no costs were
 predicted.
@@ -269,15 +294,72 @@ One of the original goals was to setup rules for scaling and load balancing if n
 costs, and because the App Engine deployment was set to scale automatically, evaluating scaling rules did not
 seem necessary. On the other hand, after trying out different use cases for load testing, an issue with timeouts was 
 identified. When requests are made for more than 10,000 records, there are times when the application cannot handle the 
-load. This is likely due to the fact that the App Engine standard environment was used and may have not been configured
-for optimal performance. It is recommended that a future iteration should use App Engine Flex or a deployment using 
-the Kubernetes Engine.
+load. This is likely due to the fact that the App Engine standard environment was used, and for optimal performance
+manual scaling rules may need to be set up in the configuration file. It is recommended that a future iteration should 
+use App Engine Flex or a deployment using the Kubernetes Engine.
 
 #### Week 10: Finish Final Stages of MVP and Deploy into Production
+Finishing touches were made to the application before deployment. Changes were made to the application code and system architecture 
+for better functionality and usability. The following changes were made:
+* An additional Cloud Function was created to clean, transform, and upload data back into Cloud Storage as a Parquet file.
+    * An issue was detected with mixed datatypes. Data types were converted to their proper formats.
+    * Numerically encoded categorical values were changed for certain categorical features. For example, values 0, 5, and 6 for education were
+    replaced to 4, indicating "Other" rather than "Unknown".
+    * Dollar amounts were converted from Taiwanese dollars to US dollars for easier readability.
+    * Unique IDs were created to prevent duplicates.
+    * Data was transformed into Parquet format for better efficiency.
+* Cloud Function to batch process data into BigQuery was updated and configured to load Parquet files.
+    * Table schema was also adjusted to be compatible with the changed data types.
+* Model in BigQuery ML was retrained with the transformed data and evaluated.
+* Application files were updated to work with the changes in the data and the updated ML model.
 
-![Application](https://i.imgur.com/HejSNqg.gif)
+The following is an updated diagram of the ETL process:
 
-References:
+![ETL Updated](https://i.ibb.co/BVNHHqK/GCP-ETL-Pipeline-Updated.png)
+
+After the changes were made, the application was redeployed into staging. Application was retested, and logs were checked for errors.
+Problems with load testing and errors were diagnosed and fixed. Using Stackdriver, any incidents related to application errors,
+system health, and latency were checked. Before deployment into production the application and system was reviewed again with the 
+following checklist:
+* Test Cloud Functions to ensure automation.
+* Check the ETL process from end to end, and validate data consistency.
+* Confirm that the application works and serves out predictions.
+* Validate that the application serves out HTTP requests via REST API.
+* Ensure that Stackdriver is properly monitoring and alerts are configured correctly.
+* Review code in development and staging branches to make sure that there are no differences.
+* Check IAM roles for application components and confirm that they have the proper permissions
+to only access areas that are needed.      
+
+Once all checklist items were reviewed and completed, the application was ready for deployment into production. The development
+branch was merge into production and pushed to GitHub. A trigger was set off in Cloud Build and the application was 
+automatically deployed to App Engine.
+
+The following is the sprint report from that week:
+
+![Sprint 10](https://i.ibb.co/S0tpf4X/Week10-Sprint.png)
+
+The demo video can be viewed by clicking the image below:
+
+[![Demo Video Deploy](https://i.ibb.co/ChqY0nG/Demo10.png)](https://www.youtube.com/watch?v=TQSE6PVuLF0&feature=youtu.be)
+
+While the application was successfully deployed and the MVP was fully functional, there was an issue that was already mentioned 
+regarding timeouts. To resolve the issue with timeouts, the configuration file may need to be set up with manual scaling
+rules, or App Engine Flex should be used. A better option would be to deploy the application using the Kubernetes Engine. 
+However, due to cost reasons, and given that the project objective was to deliver a Minimum Viable Product, using the 
+standard service was seen as sufficient enough to satisfy the purpose of the project.
+
+An additional feature that was not implemented was having the capability of making direct predictions by adding data through
+the application. Currently, the application serves out predictions from data that is updated through batch processing. 
+Implementing a process to run predictions on streaming data would have been a valuable addition as well. Enhancements such as
+these can be built in a future iteration. 
+
+### Conclusion:
+With the completion of the project, it is evident that there is a proof of concept (PoC). An application that provides predictions 
+on credit card default risk is one that holds significant value, and it is likely that there are many in use today.
+Assessing risk through predictive analytics is an endeavor that can positively affect an issuer's ROI.   
+
+
+#### References:
 1. https://newsroom.transunion.com/consumers-poised-to-continue-strong-credit-activity-this-holiday-season/
 2. https://www.newyorkfed.org/newsevents/news/research/2020/20200211
 3. https://www.cnbc.com/select/us-credit-card-debt-hits-all-time-high/
