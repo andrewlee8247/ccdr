@@ -4,22 +4,22 @@
 ### Executive Summary:
 The goal of this project was to build a Minimum Viable Product (MVP) for an application that predicts whether or not
 a credit cardholder will default on their next payment. According to the TransUnion's Industry Insights Report, the credit
-card deliquency rate reached 1.81% in Q3 2019, rising from 1.71% in Q3 of 2018 <sup>1</sup>. In addition, the Federal Reserve Bank of
+card deliquency rate reached 1.81% in Q3 2019, rising from 1.71% in Q3 of 2018<sup>1</sup>. In addition, the Federal Reserve Bank of
 New York reported that credit card delinquencies that were at least 90 days late, was at 5.32% in the fourth
-quarter of 2019, up from 5.16% in the previous quarter <sup>2</sup>. The table below shows the deliquency rates by age group 
+quarter of 2019, up from 5.16% in the previous quarter<sup>2</sup>. The table below shows the deliquency rates by age group 
 from Q1 2018: 
 
 ![90+ Deliquency Age Demographics](https://i.ibb.co/X86NjGP/90-day-deliquency-demographics.png)
 
 Data from the Federal Reserve Bank of New York also indicated that credit card debt hit an all time high of $930 billion in
-the final quarter of 2019 <sup>3</sup>. This was a $46 billion increase from the prior quarter. As credit card debt continues 
+the final quarter of 2019<sup>3</sup>. This was a $46 billion increase from the prior quarter. As credit card debt continues 
 to rise it is evident that the rate of delinquencies may continue to rise as well. From a credit card issuer's standpoint,
 it is well worth the investment to employ practices that implement predictive analytics to gauge the risk of possible 
 defaults on payments to guide the rate of credit card issuance based on certain factors. 
 
 For the project, data was taken from a study conducted in Taiwan from April 2005 to September 2005 on credit card clients
 to determine the likelihood of defaults based on various indicators. The data is publicly available from the UCI machine
-learning repository <sup>4</sup>. The dataset contains 30,000 observations, and includes 23 explanatory variables and 
+learning repository<sup>4</sup>. The dataset contains 30,000 observations, and includes 23 explanatory variables and 
 1 response variable, which is a binary variable indicating whether or not there was a default on a 
 payment (Yes = 1, No = 0). Details on the variables are as follows:
 
