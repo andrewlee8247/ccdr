@@ -21,7 +21,7 @@ For the project, data was taken from a study conducted in Taiwan from April 2005
 to determine the likelihood of defaults based on various indicators. The data is publicly available from the UCI machine
 learning repository <sup>4</sup>. The dataset contains 30,000 observations, and includes 23 explanatory variables and 
 1 response variable, which is a binary variable indicating whether or not there was a default on a 
-payment (Yes = 1, No = 2). Details on the variables are as follows:
+payment (Yes = 1, No = 0). Details on the variables are as follows:
 
 ![Default Variables](https://i.ibb.co/0JBpYW3/Default-variables.png)
 
@@ -41,15 +41,16 @@ issuers.
 
 #### System Elements:
 1. Using Google Cloud Scheduler, a recurring cron job is set up where a message is sent to a topic on Google Pub/Sub. With Google 
-Stackdriver, all system events are logged and monitored. All error logs, health check failures, and latency issues are sent as alerts 
-via email and Slack. All data is encrypted with Google-managed encryption keys, which uses AES 256 encryption for data at rest. System
-components satisfy the priniciple of least security 
+Stackdriver, all system events are logged and monitored. All error logs, health check failures, latency issues, and application status 
+are sent as alerts via email and Slack. All data is encrypted with Google-managed encryption keys, which uses AES 256 encryption for 
+data at rest. System components satisfy the priniciple of least security. 
 2. The message that is sent to Pub/Sub, sets off a trigger to run a Google Cloud Function. The Cloud Function runs code that proceeds
 to scrape all credit card default data files from the UCI machine learning repository, and uploads them to Google Cloud Storage. 
 3. Once files are uploaded to Cloud Storage, another Cloud Function is triggered that runs code to read the data from the recently uploaded
 files. The data is cleaned, transformed, and uploaded back to Cloud Storage as a Parquet file. 
 4. A third Cloud Function is then triggered that batch processes the Parquet file and loads the data into a database in BigQuery.
-5. Using the application deployed to Google App Engine, users can run predictions on the newly updated data. The application utilizes
+5. Using the application deployed to Google App Engine, users can run predictions on the newly updated data. Prediction results
+show whether or not the cardholder will default (Yes = 1, No = 0), and the associated probabilities. The application utilizes
 BigQuery ML to serve out predictions as a JSON response. Users can interface with the application via a UI set up with Swagger. 
 The application also serves out predictions from HTTP requests via REST API with a JSON payload, and can be plugged in to any front-end 
 UI. 
@@ -293,9 +294,9 @@ One of the original goals was to setup rules for scaling and load balancing if n
 costs, and because the App Engine deployment was set to scale automatically, evaluating scaling rules did not
 seem necessary. On the other hand, after trying out different use cases for load testing, an issue with timeouts was 
 identified. When requests are made for more than 10,000 records, there are times when the application cannot handle the 
-load. This is likely due to the fact that the App Engine standard environment was used and may have not been configured
-for optimal performance. It is recommended that a future iteration should use App Engine Flex or a deployment using 
-the Kubernetes Engine.
+load. This is likely due to the fact that the App Engine standard environment was used, and for optimal performance
+manual scaling rules may need to be set up in the configuration file. It is recommended that a future iteration should 
+use App Engine Flex or a deployment using the Kubernetes Engine.
 
 #### Week 10: Finish Final Stages of MVP and Deploy into Production
 Finishing touches were made to the application before deployment. Changes were made to the application code and system architecture 
@@ -311,7 +312,44 @@ for better functionality and usability. The following changes were made:
     * Table schema was also adjusted to be compatible with the changed data types.
 * Model in BigQuery ML was retrained with the transformed data and evaluated.
 * Application files were updated to work with the changes in the data and the updated ML model.
-           
+
+The following is an updated diagram of the ETL process:
+
+![ETL Updated](https://i.ibb.co/BVNHHqK/GCP-ETL-Pipeline-Updated.png)
+
+After the changes were made, the application was redeployed into staging. Application was retested, and logs were checked for errors.
+Problems with load testing and errors were diagnosed and fixed. Using Stackdriver, any incidents related to application errors,
+system health, and latency were checked. Before deployment into production the application and system was reviewed again with the 
+following checklist:
+* Test Cloud Functions to ensure automation.
+* Check the ETL process from end to end, and validate data consistency.
+* Confirm that the application works and serves out predictions.
+* Validate that the application serves out HTTP requests via REST API.
+* Ensure that Stackdriver is properly monitoring and alerts are configured correctly.
+* Review code in development and staging branches to make sure that there are no differences.
+* Check IAM roles for application components and confirm that they have the proper permissions
+to only access areas that are needed.      
+
+Once all checklist items were reviewed and completed, the application was ready for deployment into production. The development
+branch was merge into production and pushed to GitHub. A trigger was set off in Cloud Build and the application was 
+automatically deployed to App Engine. 
+
+While the application was successfully deployed and the MVP is fully functional, there is an issue that was already mentioned 
+regarding timeouts. To resolve the issue with timeouts, the configuration file may need to be set up with manual scaling
+rules, or App Engine Flex should be used. A better option would be to deploy the application using the Kubernetes Engine.  
+However, due to cost reasons, and given that the project objective was to deliver a Minimum Viable Product, using the 
+standard service was seen as sufficient enough to satisfy the purpose of the project.
+
+An additional feature that was not implemented was having the capability of making direct predictions by adding data through
+the application. Currently, the application serves out predictions from data that is updated through batch processing. 
+Implementing a process to run predictions on streaming data would have been a valuable addition as well. Enhancements such as
+these can be built in a future iteration. 
+
+### Conclusion:
+With the completion of the project, it is evident that there is a proof of concept (PoC). An application that provides predictions 
+on credit card default risk is one that holds significant value, and it is likely that there are many in use today.
+Assessing risk through predictive analytics is an endeavor that can positively affect an issuer's ROI.   
+
 
 References:
 1. https://newsroom.transunion.com/consumers-poised-to-continue-strong-credit-activity-this-holiday-season/
